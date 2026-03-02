@@ -194,6 +194,13 @@ def _(
 
 
 @app.cell
+def _(model_features, test_set):
+    # train_set[target].shape
+    test_set[model_features].shape
+    return
+
+
+@app.cell
 def _(pd, us_holidays, weathers):
     dataset_2025 = weathers[weathers['datetime']>= '2025-01-01']
     dataset_2025['datetime'] = pd.to_datetime(dataset_2025['datetime']).dt.tz_convert('America/New_York')
@@ -237,7 +244,6 @@ def _(pd, us_holidays, weathers):
     dataset_2025['summer_temp'] = dataset_2025['season_Summer'] * dataset_2025['avg_temp']
     dataset_2025['fall_temp'] = dataset_2025['season_Fall'] * dataset_2025['avg_temp']
 
-
     return (dataset_2025,)
 
 
@@ -268,27 +274,41 @@ def _(dataset_2025, final_data, model, model_features, np, pd):
         # Look back at the load_mw column (which contains 2023 actuals or 2024 predictions)
         backtest_df.at[idx2, 'prev_day_load'] = backtest_df.at[idx2 - 24, 'load_mw']
         backtest_df.at[idx2, 'prev_week_load'] = backtest_df.at[idx2 - (24 * 7), 'load_mw']
-    
+
         # Predict using your improved feature list
         current_features = backtest_df.loc[[idx2], model_features]
         prediction = model.predict(current_features)[0]
-    
+
         # Fill the 'load_mw' column so the next hour can use this prediction as a lag
         backtest_df.at[idx2, 'load_mw'] = prediction
 
-    
+
         forecast_df.at[idx, 'prev_day_load'] = forecast_df.at[idx - 24, 'load_mw']
         forecast_df.at[idx, 'prev_week_load'] = forecast_df.at[idx - (24 * 7), 'load_mw']
-    
+
         current_features = forecast_df.loc[[idx], model_features]
-    
+
         prediction = model.predict(current_features)[0]
-    
+
         forecast_df.at[idx, 'load_mw'] = prediction
 
     final_2025_results = forecast_df[forecast_df['datetime'].dt.year == 2025][['datetime', 'load_mw']]
     backtest_2024_results = forecast_df[forecast_df['datetime'].dt.year == 2024][['datetime', 'load_mw']]
-    return final_2025_results, forecast_df
+    return current_features, final_2025_results, forecast_df, forecast_indices
+
+
+@app.cell
+def _(current_features, forecast_df, forecast_indices):
+    forecast_indices
+    forecast_df.shape
+    current_features.columns
+    return
+
+
+@app.cell
+def _(model_features, train_set):
+    train_set[model_features].columns
+    return
 
 
 @app.cell
