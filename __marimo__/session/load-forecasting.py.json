@@ -19,7 +19,7 @@
     },
     {
       "id": "MJUe",
-      "code_hash": "6b01b06482c9f7b265bba55e2561f11e",
+      "code_hash": "8e8fea2a700d5fb19e3e9cc1b4875ca1",
       "outputs": [
         {
           "type": "data",
@@ -32,7 +32,7 @@
     },
     {
       "id": "vblA",
-      "code_hash": "06831709026494711ec3211082105e97",
+      "code_hash": "c90ae767e251480b65c00eeaf7a282f0",
       "outputs": [
         {
           "type": "data",
@@ -292,7 +292,7 @@
     },
     {
       "id": "ecfG",
-      "code_hash": "f2ef4d18885dd107b2c0dbf0add0dd76",
+      "code_hash": "2123e9ac83ef8767a444c48a565d4ac2",
       "outputs": [
         {
           "type": "data",
@@ -304,13 +304,26 @@
       "console": []
     },
     {
-      "id": "Pvdt",
-      "code_hash": "042fd31d0a0e0dd268571f38bd44c36e",
+      "id": "Gmwf",
+      "code_hash": null,
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/html": "<marimo-ui-element object-id='Pvdt-0' random-id='9987bfec-a751-0869-3577-aeb258359e67'><marimo-table data-initial-value='[]' data-label='null' data-data='&quot;[{&#92;&quot;&#92;&quot;:&#92;&quot;datetime&#92;&quot;,&#92;&quot;0&#92;&quot;:&#92;&quot;2021-01-01 00:00:00-05:00&#92;&quot;},{&#92;&quot;&#92;&quot;:&#92;&quot;is_weekend&#92;&quot;,&#92;&quot;0&#92;&quot;:0},{&#92;&quot;&#92;&quot;:&#92;&quot;is_night&#92;&quot;,&#92;&quot;0&#92;&quot;:1},{&#92;&quot;&#92;&quot;:&#92;&quot;is_morning&#92;&quot;,&#92;&quot;0&#92;&quot;:0},{&#92;&quot;&#92;&quot;:&#92;&quot;is_afternoon&#92;&quot;,&#92;&quot;0&#92;&quot;:0},{&#92;&quot;&#92;&quot;:&#92;&quot;is_evening&#92;&quot;,&#92;&quot;0&#92;&quot;:0},{&#92;&quot;&#92;&quot;:&#92;&quot;is_holiday&#92;&quot;,&#92;&quot;0&#92;&quot;:1},{&#92;&quot;&#92;&quot;:&#92;&quot;season_Fall&#92;&quot;,&#92;&quot;0&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;season_Spring&#92;&quot;,&#92;&quot;0&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;season_Summer&#92;&quot;,&#92;&quot;0&#92;&quot;:false}]&quot;' data-total-rows='124' data-total-columns='1' data-max-columns='50' data-banner-text='&quot;&quot;' data-pagination='true' data-page-size='10' data-field-types='[[&quot;0&quot;,[&quot;string&quot;,&quot;object&quot;]]]' data-show-filters='true' data-show-download='true' data-show-column-summaries='true' data-show-data-types='true' data-show-page-size-selector='true' data-show-column-explorer='true' data-show-chart-builder='true' data-row-headers='[[&quot;&quot;,[&quot;string&quot;,&quot;str&quot;]]]' data-has-stable-row-id='false' data-lazy='false' data-preload='false' data-download-file-name='&quot;download&quot;'></marimo-table></marimo-ui-element>"
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Pvdt",
+      "code_hash": "644f42249b7a0ebde1b8cb390ff071cc",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='Pvdt-0' random-id='f170ef02-0384-58be-3791-f11908b173c2'><marimo-table data-initial-value='[]' data-label='null' data-data='&quot;[{&#92;&quot;&#92;&quot;:&#92;&quot;datetime&#92;&quot;,&#92;&quot;0&#92;&quot;:&#92;&quot;2021-01-01 00:00:00-05:00&#92;&quot;},{&#92;&quot;&#92;&quot;:&#92;&quot;is_weekend&#92;&quot;,&#92;&quot;0&#92;&quot;:0},{&#92;&quot;&#92;&quot;:&#92;&quot;is_night&#92;&quot;,&#92;&quot;0&#92;&quot;:1},{&#92;&quot;&#92;&quot;:&#92;&quot;is_morning&#92;&quot;,&#92;&quot;0&#92;&quot;:0},{&#92;&quot;&#92;&quot;:&#92;&quot;is_afternoon&#92;&quot;,&#92;&quot;0&#92;&quot;:0},{&#92;&quot;&#92;&quot;:&#92;&quot;is_evening&#92;&quot;,&#92;&quot;0&#92;&quot;:0},{&#92;&quot;&#92;&quot;:&#92;&quot;is_holiday&#92;&quot;,&#92;&quot;0&#92;&quot;:1},{&#92;&quot;&#92;&quot;:&#92;&quot;season_Fall&#92;&quot;,&#92;&quot;0&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;season_Spring&#92;&quot;,&#92;&quot;0&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;season_Summer&#92;&quot;,&#92;&quot;0&#92;&quot;:false}]&quot;' data-total-rows='124' data-total-columns='1' data-max-columns='50' data-banner-text='&quot;&quot;' data-pagination='true' data-page-size='10' data-field-types='[[&quot;0&quot;,[&quot;string&quot;,&quot;object&quot;]]]' data-show-filters='true' data-show-download='true' data-show-column-summaries='true' data-show-data-types='true' data-show-page-size-selector='true' data-show-column-explorer='true' data-show-chart-builder='true' data-row-headers='[[&quot;&quot;,[&quot;string&quot;,&quot;str&quot;]]]' data-has-stable-row-id='false' data-lazy='false' data-preload='false' data-download-file-name='&quot;download&quot;'></marimo-table></marimo-ui-element>"
           }
         }
       ],
@@ -324,21 +337,21 @@
       ]
     },
     {
-      "id": "ELdA",
-      "code_hash": "dffd1012570a6e566fb1db30e56d1979",
+      "id": "ZBYS",
+      "code_hash": "9ea6adf148c31d492421d6a9166518a5",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/html": "<marimo-ui-element object-id='ELdA-0' random-id='d710b129-d5b9-bdbf-540d-e83a40c386a8'><marimo-table data-initial-value='[]' data-label='null' data-data='&quot;[{&#92;&quot;&#92;&quot;:&#92;&quot;datetime&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;is_weekend&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;is_night&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;is_morning&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;is_afternoon&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;is_evening&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;is_holiday&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;season_Fall&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;season_Spring&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;season_Summer&#92;&quot;,&#92;&quot;value&#92;&quot;:false}]&quot;' data-total-rows='124' data-total-columns='1' data-max-columns='50' data-banner-text='&quot;&quot;' data-pagination='true' data-page-size='10' data-field-types='[[&quot;value&quot;,[&quot;boolean&quot;,&quot;bool&quot;]]]' data-show-filters='true' data-show-download='true' data-show-column-summaries='true' data-show-data-types='true' data-show-page-size-selector='true' data-show-column-explorer='true' data-show-chart-builder='true' data-row-headers='[[&quot;&quot;,[&quot;string&quot;,&quot;str&quot;]]]' data-has-stable-row-id='false' data-lazy='false' data-preload='false' data-download-file-name='&quot;download&quot;'></marimo-table></marimo-ui-element>"
+            "text/html": "<marimo-ui-element object-id='ZBYS-0' random-id='b4a68b75-8b4c-f010-13a8-8c37c9ab9418'><marimo-table data-initial-value='[]' data-label='null' data-data='&quot;[{&#92;&quot;&#92;&quot;:&#92;&quot;datetime&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;is_weekend&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;is_night&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;is_morning&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;is_afternoon&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;is_evening&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;is_holiday&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;season_Fall&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;season_Spring&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;season_Summer&#92;&quot;,&#92;&quot;value&#92;&quot;:false}]&quot;' data-total-rows='124' data-total-columns='1' data-max-columns='50' data-banner-text='&quot;&quot;' data-pagination='true' data-page-size='10' data-field-types='[[&quot;value&quot;,[&quot;boolean&quot;,&quot;bool&quot;]]]' data-show-filters='true' data-show-download='true' data-show-column-summaries='true' data-show-data-types='true' data-show-page-size-selector='true' data-show-column-explorer='true' data-show-chart-builder='true' data-row-headers='[[&quot;&quot;,[&quot;string&quot;,&quot;str&quot;]]]' data-has-stable-row-id='false' data-lazy='false' data-preload='false' data-download-file-name='&quot;download&quot;'></marimo-table></marimo-ui-element>"
           }
         }
       ],
       "console": []
     },
     {
-      "id": "LzSh",
-      "code_hash": "18ae518a5d11d3f79f2a643727a626a1",
+      "id": "aLJB",
+      "code_hash": "6a0994805eabf02253df387eb1095903",
       "outputs": [
         {
           "type": "data",
@@ -351,10 +364,42 @@
         {
           "type": "stream",
           "name": "stdout",
-          "text": "Training Set:  26280\nTesting Set:  8784\nValidation Mape (2024): 0.034875705554285694\n",
+          "text": "Training Set:  26283\nTesting Set:  8785\nValidation Mape (2024): 0.04087998629356505\n",
           "mimetype": "text/plain"
         }
       ]
+    },
+    {
+      "id": "nHfw",
+      "code_hash": "a958c25d4b135cb0dc2dd5ba6653f981",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='nHfw-0' random-id='e0c59e05-3d9f-a141-8357-33c3cae61128'><marimo-table data-initial-value='[]' data-label='null' data-data='&quot;[{&#92;&quot;&#92;&quot;:&#92;&quot;datetime&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;is_weekend&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;is_night&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;is_morning&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;is_afternoon&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;is_evening&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;is_holiday&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;season_Fall&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;season_Spring&#92;&quot;,&#92;&quot;value&#92;&quot;:false},{&#92;&quot;&#92;&quot;:&#92;&quot;season_Summer&#92;&quot;,&#92;&quot;value&#92;&quot;:false}]&quot;' data-total-rows='124' data-total-columns='1' data-max-columns='50' data-banner-text='&quot;&quot;' data-pagination='true' data-page-size='10' data-field-types='[[&quot;value&quot;,[&quot;boolean&quot;,&quot;bool&quot;]]]' data-show-filters='true' data-show-download='true' data-show-column-summaries='true' data-show-data-types='true' data-show-page-size-selector='true' data-show-column-explorer='true' data-show-chart-builder='true' data-row-headers='[[&quot;&quot;,[&quot;string&quot;,&quot;str&quot;]]]' data-has-stable-row-id='false' data-lazy='false' data-preload='false' data-download-file-name='&quot;download&quot;'></marimo-table></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "xXTn",
+      "code_hash": "923715767b46e6314eb461b7b0b3b9ba",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "AjVT",
+      "code_hash": null,
+      "outputs": [],
+      "console": []
     }
   ]
 }

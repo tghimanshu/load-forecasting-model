@@ -20,7 +20,14 @@ def _():
     from sklearn.metrics import mean_absolute_percentage_error
     from sklearn.linear_model import LinearRegression
 
-    return holidays, mo, pd
+    return (
+        GradientBoostingRegressor,
+        holidays,
+        mean_absolute_percentage_error,
+        mo,
+        np,
+        pd,
+    )
 
 
 @app.cell
@@ -28,14 +35,14 @@ def _(holidays):
     us_holidays = holidays.US()
 
     def get_season(month):
-        if month in [12,1,2]:
-            return 'Winter'
-        elif month in [3,4,5]:
-            return 'Spring'
-        elif month in [6,7,8]:
-            return 'Summer'
+        if month in [12, 1, 2]:
+            return "Winter"
+        elif month in [3, 4, 5]:
+            return "Spring"
+        elif month in [6, 7, 8]:
+            return "Summer"
         else:
-            return 'Fall'
+            return "Fall"
 
     return get_season, us_holidays
 
@@ -45,11 +52,13 @@ def _(pd):
     loads = pd.read_csv("./actual_load.csv")
     weathers = pd.read_csv("./actual_weather_all_ws.csv")
 
-    loads['datetime'] = pd.to_datetime(loads['datetime'], utc=True)
-    loads['datetime'] = loads['datetime'].dt.tz_convert('America/New_York')
+    loads["datetime"] = pd.to_datetime(loads["datetime"])
+    loads["datetime"] = loads["datetime"].dt.tz_localize(
+        "America/New_York", ambiguous=True, nonexistent="shift_forward"
+    )
 
-    weathers['datetime'] = pd.to_datetime(weathers['datetime'], utc=True)
-    weathers['datetime'] = weathers['datetime'].dt.tz_convert('America/New_York')
+    weathers["datetime"] = pd.to_datetime(weathers["datetime"], utc=True)
+    weathers["datetime"] = weathers["datetime"].dt.tz_convert("America/New_York")
 
     # Got the full date range
     # full_range = pd.date_range(start=loads['datetime'].min(), end=loads['datetime'].max(), freq="h", tz='UTC')
@@ -317,50 +326,125 @@ def _(mo):
 
 @app.cell
 def _(get_season, pd, us_holidays, weathers):
-    date_range = pd.date_range(start='2021-01-01', end='2026-01-01', freq='h', tz='America/New_York')
-    main_dataset = pd.DataFrame({'datetime': date_range})
-    main_dataset = main_dataset.iloc[:-1]
+    date_range = pd.date_range(
+        start="2021-01-01", end="2025-12-31 23:00", freq="h", tz="America/New_York"
+    )
+    main_dataset = pd.DataFrame({"datetime": date_range})
 
-    main_dataset['hour'] = main_dataset['datetime'].dt.hour
-    main_dataset['day_of_week'] = main_dataset['datetime'].dt.dayofweek
-    main_dataset['month'] = main_dataset['datetime'].dt.month
-    main_dataset['is_weekend'] = main_dataset['day_of_week'].isin([5, 6]).astype(int)
-    main_dataset['is_night'] = ((main_dataset['hour'] >= 0) & (main_dataset['hour'] <= 6)).astype(int)
-    main_dataset['is_morning'] = ((main_dataset['hour'] >= 7) & (main_dataset['hour'] <= 11)).astype(int)
-    main_dataset['is_afternoon'] = ((main_dataset['hour'] >= 12) & (main_dataset['hour'] <= 17)).astype(int)
-    main_dataset['is_evening'] = ((main_dataset['hour'] >= 18) & (main_dataset['hour'] <= 23)).astype(int)
-    main_dataset['is_holiday'] = main_dataset['datetime'].dt.date.apply(lambda x: x in us_holidays).astype(int)
-    main_dataset['season'] = main_dataset['month'].apply(get_season)
+    main_dataset["hour"] = main_dataset["datetime"].dt.hour
+    main_dataset["day_of_week"] = main_dataset["datetime"].dt.dayofweek
+    main_dataset["month"] = main_dataset["datetime"].dt.month
+    main_dataset["is_weekend"] = main_dataset["day_of_week"].isin([5, 6]).astype(int)
+    main_dataset["is_night"] = (
+        (main_dataset["hour"] >= 0) & (main_dataset["hour"] <= 6)
+    ).astype(int)
+    main_dataset["is_morning"] = (
+        (main_dataset["hour"] >= 7) & (main_dataset["hour"] <= 11)
+    ).astype(int)
+    main_dataset["is_afternoon"] = (
+        (main_dataset["hour"] >= 12) & (main_dataset["hour"] <= 17)
+    ).astype(int)
+    main_dataset["is_evening"] = (
+        (main_dataset["hour"] >= 18) & (main_dataset["hour"] <= 23)
+    ).astype(int)
+    main_dataset["is_holiday"] = (
+        main_dataset["datetime"].dt.date.apply(lambda x: x in us_holidays).astype(int)
+    )
+    main_dataset["season"] = main_dataset["month"].apply(get_season)
 
-    main_dataset = pd.get_dummies(main_dataset, columns=['season', 'day_of_week', 'hour', 'month'], prefix=['season', 'day_of_week', 'hour', 'month'])
+    main_dataset = pd.get_dummies(
+        main_dataset,
+        columns=["season", "day_of_week", "hour", "month"],
+        prefix=["season", "day_of_week", "hour", "month"],
+    )
 
-    main_dataset = main_dataset.merge(weathers, on='datetime', how='left')
+    main_dataset = main_dataset.merge(weathers, on="datetime", how="left")
 
-    main_dataset.rename(columns={'avg_all_ws_temp': 'avg_temp'}, inplace=True)
-    main_dataset['prev_day_avg_temp'] = main_dataset['avg_temp'].shift(24)
-    main_dataset['prev_week_avg_temp'] = main_dataset['avg_temp'].shift(24 * 7)
+    main_dataset.rename(columns={"avg_all_ws_temp": "avg_temp"}, inplace=True)
 
-    main_dataset['prev_day_avg_temp'] = main_dataset['prev_day_avg_temp'].bfill()
-    main_dataset['prev_week_avg_temp'] = main_dataset['prev_week_avg_temp'].bfill()
+    # ffill for any mid-series weather gaps (no future data leakage)
+    main_dataset["avg_temp"] = main_dataset["avg_temp"].ffill()
 
-    main_dataset['rolling_avg_temp_6h'] = main_dataset['avg_temp'].rolling(window=6).mean()
-    main_dataset['rolling_avg_temp_24h'] = main_dataset['avg_temp'].rolling(window=24).mean()
+    main_dataset["prev_day_avg_temp"] = main_dataset["avg_temp"].shift(24)
+    main_dataset["prev_week_avg_temp"] = main_dataset["avg_temp"].shift(24 * 7)
 
-    main_dataset['rolling_avg_temp_6h'] = main_dataset['rolling_avg_temp_6h'].bfill()
-    main_dataset['rolling_avg_temp_24h'] = main_dataset['rolling_avg_temp_24h'].bfill()
+    main_dataset["rolling_avg_temp_6h"] = (
+        main_dataset["avg_temp"].rolling(window=6).mean()
+    )
+    main_dataset["rolling_avg_temp_24h"] = (
+        main_dataset["avg_temp"].rolling(window=24).mean()
+    )
 
-    main_dataset['cdd'] = main_dataset['avg_temp'].apply(lambda x: max(0, x - 18))
-    main_dataset['hdd'] = main_dataset['avg_temp'].apply(lambda x: max(0, 18 - x))
+    main_dataset["cdd"] = main_dataset["avg_temp"].apply(lambda x: max(0, x - 18))
+    main_dataset["hdd"] = main_dataset["avg_temp"].apply(lambda x: max(0, 18 - x))
 
-    main_dataset['winter_temp'] = main_dataset['season_Winter'] * main_dataset['avg_temp']
-    main_dataset['spring_temp'] = main_dataset['season_Spring'] * main_dataset['avg_temp']
-    main_dataset['summer_temp'] = main_dataset['season_Summer'] * main_dataset['avg_temp']
-    main_dataset['fall_temp'] = main_dataset['season_Fall'] * main_dataset['avg_temp']
+    main_dataset["winter_temp"] = (
+        main_dataset["season_Winter"] * main_dataset["avg_temp"]
+    )
+    main_dataset["spring_temp"] = (
+        main_dataset["season_Spring"] * main_dataset["avg_temp"]
+    )
+    main_dataset["summer_temp"] = (
+        main_dataset["season_Summer"] * main_dataset["avg_temp"]
+    )
+    main_dataset["fall_temp"] = main_dataset["season_Fall"] * main_dataset["avg_temp"]
 
-    cols = ['season_Fall', 'season_Spring', 'season_Summer', 'season_Winter', 'day_of_week_0', 'day_of_week_1', 'day_of_week_2', 'day_of_week_3', 'day_of_week_4', 'day_of_week_5', 'day_of_week_6', 'hour_0', 'hour_1', 'hour_2', 'hour_3', 'hour_4', 'hour_5', 'hour_6', 'hour_7', 'hour_8', 'hour_9', 'hour_10', 'hour_11', 'hour_12', 'hour_13', 'hour_14', 'hour_15', 'hour_16', 'hour_17', 'hour_18', 'hour_19', 'hour_20', 'hour_21', 'hour_22', 'hour_23', 'month_1', 'month_2', 'month_3', 'month_4', 'month_5', 'month_6', 'month_7', 'month_8', 'month_9', 'month_10', 'month_11', 'month_12']
+    cols = [
+        "season_Fall",
+        "season_Spring",
+        "season_Summer",
+        "season_Winter",
+        "day_of_week_0",
+        "day_of_week_1",
+        "day_of_week_2",
+        "day_of_week_3",
+        "day_of_week_4",
+        "day_of_week_5",
+        "day_of_week_6",
+        "hour_0",
+        "hour_1",
+        "hour_2",
+        "hour_3",
+        "hour_4",
+        "hour_5",
+        "hour_6",
+        "hour_7",
+        "hour_8",
+        "hour_9",
+        "hour_10",
+        "hour_11",
+        "hour_12",
+        "hour_13",
+        "hour_14",
+        "hour_15",
+        "hour_16",
+        "hour_17",
+        "hour_18",
+        "hour_19",
+        "hour_20",
+        "hour_21",
+        "hour_22",
+        "hour_23",
+        "month_1",
+        "month_2",
+        "month_3",
+        "month_4",
+        "month_5",
+        "month_6",
+        "month_7",
+        "month_8",
+        "month_9",
+        "month_10",
+        "month_11",
+        "month_12",
+    ]
 
     for col in cols:
-        main_dataset[f'{col}_temp'] = main_dataset[col] * main_dataset['avg_temp']
+        main_dataset[f"{col}_temp"] = main_dataset[col] * main_dataset["avg_temp"]
+
+    # Drop rows with NaNs from lag/rolling features (avoids leaking future data via bfill)
+    # main_dataset.dropna(inplace=True)
+    main_dataset.reset_index(drop=True, inplace=True)
 
     # main_dataset.head(5)
     main_dataset.columns
@@ -368,33 +452,52 @@ def _(get_season, pd, us_holidays, weathers):
 
 
 @app.cell
+def _():
+    return
+
+
+@app.cell
 def _(loads, main_dataset):
     # 2021-2024 dataset
-    training_dataset = main_dataset[main_dataset['datetime'] < '2025-01-01'].copy()
-    training_dataset = training_dataset.merge(loads, on='datetime', how='left')
-    training_dataset['load_mw'] = training_dataset['load_mw'].interpolate(method='linear')
+    training_dataset = main_dataset[main_dataset["datetime"].dt.year < 2025].copy()
+    training_dataset = training_dataset.merge(loads, on="datetime", how="left")
+    training_dataset["load_mw"] = training_dataset["load_mw"].interpolate(
+        method="linear"
+    )
     training_dataset.iloc[0].T
     return (training_dataset,)
 
 
 @app.cell
 def _(training_dataset):
+    training_dataset['prev_day_avg_temp'] = training_dataset['prev_day_avg_temp'].ffill()
+    training_dataset['prev_week_avg_temp'] = training_dataset['prev_week_avg_temp'].ffill()
+    training_dataset['rolling_avg_temp_6h'] = training_dataset['rolling_avg_temp_6h'].ffill()
+    training_dataset['rolling_avg_temp_24h'] = training_dataset['rolling_avg_temp_24h'].ffill()
     training_dataset.isna().any()
     return
 
 
-app._unparsable_cell(
-    r"""
-    model_features = [feat for feat in training_dataset.columns if feat not in ['datetime', 'load_mw']]
-    target = 'load_mw'
-    cutoff_period = '2024-01-01'
-    train_set = training_dataset[training_dataset['datetime'] < cutoff_period]
-    test_set = training_dataset[training_dataset['datetime'] >= cutoff_period]
+@app.cell
+def _(
+    GradientBoostingRegressor,
+    mean_absolute_percentage_error,
+    training_dataset,
+):
+    model_features = [
+        feat for feat in training_dataset.columns if feat not in ["datetime", "load_mw", "ws1_temp", "ws2_temp", "ws3_temp", "ws4_temp", "ws5_temp", "ws6_temp", "ws7_temp", "ws8_temp", "ws9_temp", "ws10_temp", "ws11_temp", "ws12_temp", "ws13_temp", "ws14_temp", "ws15_temp", "ws16_temp", "ws17_temp", "ws18_temp", "ws19_temp", "ws20_temp"]
+    ]
+    target = "load_mw"
+    cutoff_period = 2024
+    train_set = training_dataset[training_dataset["datetime"].dt.year < cutoff_period]
+    test_set = training_dataset[training_dataset["datetime"].dt.year >= cutoff_period]
 
     print("Training Set: ", len(train_set))
     print("Testing Set: ", len(test_set))
 
-    model = GradientBoostingRegressor(n_estimators=500, learning_rate=0.1, max_depth=5, random_state=25:w)
+    model = GradientBoostingRegressor(
+        n_estimators=500, learning_rate=0.1, max_depth=7, random_state=25
+    )
     model.fit(train_set[model_features], train_set[target])
     # model = LinearRegression()
     # model.fit(train_set[model_features], train_set[target])
@@ -403,9 +506,41 @@ app._unparsable_cell(
 
     mape = mean_absolute_percentage_error(test_set[target], test_preds)
     print(f"Validation Mape (2024): {mape}")
-    """,
-    name="_"
-)
+    return model, model_features
+
+
+@app.cell
+def _(main_dataset, model, model_features, np):
+    # 2025 Dataset
+
+    dataset_2025 = main_dataset[main_dataset["datetime"].dt.year == 2025].copy()
+    dataset_2025['prev_day_avg_temp'] = dataset_2025['prev_day_avg_temp'].ffill()
+    dataset_2025['prev_week_avg_temp'] = dataset_2025['prev_week_avg_temp'].ffill()
+    dataset_2025['rolling_avg_temp_6h'] = dataset_2025['rolling_avg_temp_6h'].ffill()
+    dataset_2025['rolling_avg_temp_24h'] = dataset_2025['rolling_avg_temp_24h'].ffill()
+    dataset_2025["load_mw"] = np.nan
+    dataset_2025.reset_index(drop=True, inplace=True)
+
+    preds = model.predict(dataset_2025[model_features])
+    dataset_2025.isna().any()
+    return dataset_2025, preds
+
+
+@app.cell
+def _(dataset_2025, preds):
+    dataset_2025.max()
+    preds
+    dataset_2025["load_mw"] = preds
+    final_2025_results = dataset_2025[["datetime", "load_mw"]]
+    final_2025_results['datetime'] = final_2025_results['datetime'].dt.strftime('%Y-%m-%d %H:00:00')
+    final_2025_results.rename(columns={'load_mw': 'forecast_load'}, inplace=True)
+    final_2025_results.to_csv("JackOfAllTrades.csv", index=False)
+    return
+
+
+@app.cell
+def _():
+    return
 
 
 if __name__ == "__main__":
