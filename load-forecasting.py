@@ -470,10 +470,10 @@ def _(loads, main_dataset):
 
 @app.cell
 def _(training_dataset):
-    training_dataset['prev_day_avg_temp'] = training_dataset['prev_day_avg_temp'].ffill()
-    training_dataset['prev_week_avg_temp'] = training_dataset['prev_week_avg_temp'].ffill()
-    training_dataset['rolling_avg_temp_6h'] = training_dataset['rolling_avg_temp_6h'].ffill()
-    training_dataset['rolling_avg_temp_24h'] = training_dataset['rolling_avg_temp_24h'].ffill()
+    training_dataset['prev_day_avg_temp'] = training_dataset['prev_day_avg_temp'].bfill()
+    training_dataset['prev_week_avg_temp'] = training_dataset['prev_week_avg_temp'].bfill()
+    training_dataset['rolling_avg_temp_6h'] = training_dataset['rolling_avg_temp_6h'].bfill()
+    training_dataset['rolling_avg_temp_24h'] = training_dataset['rolling_avg_temp_24h'].bfill()
     training_dataset.isna().any()
     return
 
@@ -514,10 +514,10 @@ def _(main_dataset, model, model_features, np):
     # 2025 Dataset
 
     dataset_2025 = main_dataset[main_dataset["datetime"].dt.year == 2025].copy()
-    dataset_2025['prev_day_avg_temp'] = dataset_2025['prev_day_avg_temp'].ffill()
-    dataset_2025['prev_week_avg_temp'] = dataset_2025['prev_week_avg_temp'].ffill()
-    dataset_2025['rolling_avg_temp_6h'] = dataset_2025['rolling_avg_temp_6h'].ffill()
-    dataset_2025['rolling_avg_temp_24h'] = dataset_2025['rolling_avg_temp_24h'].ffill()
+    dataset_2025['prev_day_avg_temp'] = dataset_2025['prev_day_avg_temp'].bfill()
+    dataset_2025['prev_week_avg_temp'] = dataset_2025['prev_week_avg_temp'].bfill()
+    dataset_2025['rolling_avg_temp_6h'] = dataset_2025['rolling_avg_temp_6h'].bfill()
+    dataset_2025['rolling_avg_temp_24h'] = dataset_2025['rolling_avg_temp_24h'].bfill()
     dataset_2025["load_mw"] = np.nan
     dataset_2025.reset_index(drop=True, inplace=True)
 
